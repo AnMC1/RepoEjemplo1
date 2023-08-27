@@ -1,2 +1,165 @@
-camino FEO
-camino hermoso
+import os
+import tkinter as tk
+from tkinter import ttk, messagebox
+from PIL import Image, ImageTk
+
+def show_frame(frame):
+    frame.tkraise()
+    
+def cargar_imagen(nombre):
+    ruta = os.path.join('files', nombre)
+    imagen = Image.open(ruta)
+    imagen = imagen.resize((400, 500), Image.BILINEAR) 
+    imagen = ImageTk.PhotoImage(imagen)
+    return imagen
+
+def rolUsuario(): # Simular un rol actual
+    return fr0_e2.get()
+
+def accederReporte1():
+    tipoAutenticacion = rolUsuario()
+    if tipoAutenticacion == "Administrador de Inventario":
+        messagebox.showinfo("Acceso Restringido", "No tienes acceso a este reporte.")
+    else:
+        show_frame(frame1)
+
+def accederReporte2():
+    tipoAutenticacion = rolUsuario()
+    if tipoAutenticacion == "Financiero Contable":
+        messagebox.showinfo("Acceso Restringido", "No tienes acceso a este reporte.")
+    else:
+        show_frame(frame2)
+
+def checkEmpty(*args):
+    for field in args:
+        if not field.strip():
+            return True
+    return False
+
+GEBP = tk.Tk()
+GEBP.title("Sistema de Cobros")
+GEBP.geometry('400x500')
+
+GEBP.rowconfigure(0, weight=1)
+GEBP.columnconfigure(0, weight=1)
+GEBP.resizable(width=False, height=False)
+
+frame0 = tk.Frame(GEBP)
+frame1 = tk.Frame(GEBP)
+frame2 = tk.Frame(GEBP)
+
+for frame in (frame0, frame1, frame2):
+    frame.grid(row=0, column=0, sticky='nsew')
+
+bg1_image = cargar_imagen("background1.gif")
+background_label = tk.Label(frame0, image=bg1_image)
+background_label.place(relwidth=1, relheight=1)
+
+bg2_image = cargar_imagen("background2.gif")
+background_label2 = tk.Label(frame1, image=bg2_image)
+background_label2.place(relwidth=1, relheight=1)
+
+bg3_image = cargar_imagen("background3.gif")
+background_label3 = tk.Label(frame2, image=bg3_image)
+background_label3.place(relwidth=1, relheight=1)
+
+rol_list = ["Director", "Bibliotecario", "Financiero Contable", "Administrador de Inventario"]
+
+###################################################################################################
+#########################################  Frame0  ################################################
+###################################################################################################
+
+fr0_lab0 = tk.Label(frame0, text="Iniciar sesión", font=("Cambria", 20, "italic", "bold"), background="#C1F8CF")
+fr0_lab0.place(relx=0.5, rely=0.3, anchor=tk.CENTER)
+
+fr0_lab1 = tk.Label(frame0, text="Biblioteca TEC", font=("Cambria", 24, "italic", "bold"), background="#4FD3C4")
+fr0_lab1.place(relx=0.5, rely=0.1, anchor=tk.CENTER)
+
+fr0_lab2 = tk.Label(frame0, text="Tipo de autenticación", font=("Cambria", 13, "italic", "bold"), background="#C1F8CF")
+fr0_lab2.place(x=40, y=220, anchor=tk.W)
+fr0_lab3 = tk.Label(frame0, text="Nombre:", font=("Cambria", 12, "italic",  "bold"), background="#C1F8CF")
+fr0_lab3.place(x=40, y=270, anchor=tk.W)
+fr0_lab4 = tk.Label(frame0, text="Contraseña:", font=("Cambria", 12, "italic",  "bold"), background="#C1F8CF")
+fr0_lab4.place(x=40, y=320, anchor=tk.W)
+
+fr0_e2 = ttk.Combobox(frame0, values=rol_list, font=("Cambria", 12, "bold"))
+fr0_e2.place(x=220, y=210, width=160)
+fr0_e3 = tk.Entry(frame0, font=("Cambria", 12))
+fr0_e3.place(x=220, y=260, width=160)
+fr0_e4 = tk.Entry(frame0, font=("Cambria", 12))
+fr0_e4.place(x=220, y=310, width=160)
+
+def fr0_reg():
+    nombre = fr0_e2.get()
+    contrasenia = fr0_e3.get()
+    if checkEmpty(nombre, contrasenia):
+        messagebox.showinfo(message="Espacio vacío", title="Error")
+    else:
+        show_frame(frame1)
+
+fr0_btn3 = tk.Button(frame0, text="Ingresar", width=10, fg="black", command=lambda: show_frame(frame1),
+                     font=("Cambria", 12, "italic", "bold"), bd=5, bg="#C1F8CF")
+fr0_btn3.place(relx=0.7, rely=0.9, anchor=tk.CENTER)
+
+fr0_btn2 = tk.Button(frame0, text="Salir", width=10, fg="black", command=lambda: show_frame(frame0),
+                     font=("Cambria", 12, "italic", "bold"), bd=5, bg="#4FD3C4")
+fr0_btn2.place(relx=0.3, rely=0.9, anchor=tk.CENTER)
+
+###################################################################################################
+#########################################  Frame1  ################################################
+###################################################################################################
+
+fr1_lab1 = tk.Label(frame1, text="Generar Reportes", font=("Cambria", 20, "italic", "bold"), background="#F1E2D1")
+fr1_lab1.place(relx=0.5, rely=0.2, anchor=tk.CENTER)
+
+# Botón 1: Reporte de morosos
+fr1_btn1 = tk.Button(frame1, text="1. Reporte de morosos", width=18, fg="black", command=accederReporte1,
+                     font=("Cambria", 13, "italic", "bold"), background="#F1E2D1")
+fr1_btn1.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
+
+# Botón 2: Reporte de libros
+fr1_btn2 = tk.Button(frame1, text="2. Reporte de libros", width=18, fg="black", command=accederReporte2,
+                     font=("Cambria", 13, "italic", "bold"), background="#F1E2D1")
+fr1_btn2.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
+
+fr1_btn2 = tk.Button(frame1, text="Salir", width=10, fg="black", command=lambda: show_frame(frame1),
+                     font=("Cambria", 12, "italic", "bold"), bd=5, bg="#F1E2D1")
+fr1_btn2.place(relx=0.7, rely=0.9, anchor=tk.CENTER)
+
+fr1_btn3 = tk.Button(frame1, text="Atrás", width=10, fg="black", command=lambda: show_frame(frame0),
+                     font=("Cambria", 12, "italic", "bold"), bd=5, bg="#F1E2D1")
+fr1_btn3.place(relx=0.3, rely=0.9, anchor=tk.CENTER)
+
+###################################################################################################
+#########################################  Frame2  ################################################
+###################################################################################################
+
+fr2_lab1 = tk.Label(frame2, text="Registrar un libro extraviado", font=("Cambria", 20, "italic", "bold"), background="#CEA67A")
+fr2_lab1.place(relx=0.5, rely=0.2, anchor=tk.CENTER)
+
+fr2_lab2 = tk.Label(frame2, text="Cantidad disponible:", font=("Cambria", 12, "italic", "bold"), background="#CEA67A")
+fr2_lab2.place(x=20, y=170)
+fr2_lab3 = tk.Label(frame2, text="Cantidad extravida:", font=("Cambria", 12, "italic", "bold"), background="#CEA67A")
+fr2_lab3.place(x=20, y=230)
+fr2_lab4 = tk.Label(frame2, text="Campus donde se extravio:", font=("Cambria", 12, "italic", "bold"), background="#CEA67A")
+fr2_lab4.place(x=20, y=290)
+ 
+fr2_e2 = tk.Entry(frame2, font=("Cambria", 12))
+fr2_e2.place(x=220, y=170, width=160)
+fr2_e3 = tk.Entry(frame2, font=("Cambria", 12))
+fr2_e3.place(x=220, y=230, width=160)
+fr2_e4 = tk.Entry(frame2, font=("Cambria", 12))
+fr2_e4.place(x=220, y=290, width=160)
+
+fr2_btn2 = tk.Button(frame2, text="Registrar", width=10, fg="black", command=lambda: show_frame(frame2),
+                     font=("Cambria", 12, "italic", "bold"), bd=5, bg="#CEA67A")
+fr2_btn2.place(relx=0.7, rely=0.9, anchor=tk.CENTER)
+
+fr2_btn3 = tk.Button(frame2, text="Atrás", width=10, fg="black", command=lambda: show_frame(frame1),
+                     font=("Cambria", 12, "italic", "bold"), bd=5, bg="#CEA67A")
+fr2_btn3.place(relx=0.3, rely=0.9, anchor=tk.CENTER)
+
+show_frame(frame0)
+
+GEBP.mainloop()
+
